@@ -27,12 +27,6 @@ export default function Navbar() {
           >
             {config.brand}®
           </span>
-          <span
-            className="select-none text-[25px] text-white sm:text-[30px]"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            ✳︎
-          </span>
         </div>
 
         <div className="hidden text-[23px] text-white md:flex">

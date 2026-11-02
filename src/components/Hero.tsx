@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { config } from '../config'
+import { prefersReducedMotion } from '../hooks/useInView'
 import { useTypewriter } from '../hooks/useTypewriter'
 
 const pillBase =
@@ -15,6 +16,20 @@ export default function Hero() {
   }, [])
 
   const [copied, setCopied] = useState(false)
+  const box = useRef<HTMLDivElement>(null)
+
+  // The whole text block leans toward the cursor in 3D (mouse only, off for reduced motion).
+  useEffect(() => {
+    if (prefersReducedMotion()) return
+    const lean = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse' || !box.current) return
+      const x = e.clientX / window.innerWidth - 0.5
+      const y = e.clientY / window.innerHeight - 0.5
+      box.current.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 7}deg)`
+    }
+    window.addEventListener('pointermove', lean)
+    return () => window.removeEventListener('pointermove', lean)
+  }, [])
 
   const copyEmail = async () => {
     try {
@@ -28,7 +43,11 @@ export default function Hero() {
 
   return (
     <section className="relative z-[1] flex h-screen flex-col justify-end overflow-hidden px-5 pb-12 sm:px-8 md:justify-center md:px-10 md:pb-0">
-      <div className="relative z-10 max-w-xl">
+      <div
+        ref={box}
+        className="relative z-10 max-w-xl transition-transform duration-300 ease-out"
+        style={{ transformOrigin: '0% 50%' }}
+      >
         <div
           className="pointer-events-none mb-5 select-none sm:mb-6"
           style={{

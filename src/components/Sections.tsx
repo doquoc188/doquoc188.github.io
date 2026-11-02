@@ -1,17 +1,17 @@
 import { config } from '../config'
-import { CountUp, ExternalLink, Reveal, Section } from './ui'
+import { CountUp, ExternalLink, Reveal, Section, Tilt } from './ui'
 
 export function Program() {
   const p = config.program
   return (
     <Section id="program" eyebrow="New · Training program" title="Next up: hands-on AI talent training.">
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl border border-white/30 bg-gradient-to-br from-white/[0.14] to-white/[0.03] p-6 sm:p-12">
+        <Tilt className="rounded-3xl border border-white/30 bg-gradient-to-br from-white/[0.14] to-white/[0.03] p-6 sm:p-12">
           <span className="mb-6 inline-block rounded-full bg-white px-4 py-1 text-[13px] text-black sm:text-sm">
             {p.status}
           </span>
           <h3
-            className="mb-2 text-[clamp(26px,5vw,56px)] leading-[1.08] tracking-tight text-white"
+            className="mb-2 text-[clamp(26px,5vw,56px)] leading-[1.08] tracking-tight text-white [transform:translateZ(36px)]"
             lang="vi"
             style={{ fontFamily: 'var(--font-heading)' }}
           >
@@ -21,7 +21,7 @@ export function Program() {
           <p className="text-[18px] text-white sm:text-[22px]">{p.org}</p>
           <p className="mt-1 text-sm text-white/60 sm:text-base">{p.orgFull}</p>
           <p className="mt-8 text-xs text-white/40">{p.enNote}</p>
-        </div>
+        </Tilt>
       </Reveal>
     </Section>
   )
@@ -32,7 +32,7 @@ export function Research() {
   return (
     <Section id="research" eyebrow="Research" title="Auditing LLM safety in Vietnamese.">
       <Reveal>
-        <div className="grid gap-8 rounded-3xl border border-white/15 bg-white/[0.04] p-6 sm:p-10 md:grid-cols-[1fr_auto] md:items-end">
+        <Tilt className="grid gap-8 rounded-3xl border border-white/15 bg-white/[0.04] p-6 sm:p-10 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="mb-4 text-sm text-white/50">
               {r.role} · {r.venue} · {r.status}
@@ -42,13 +42,13 @@ export function Research() {
             </h3>
             <p className="max-w-2xl text-base text-white/70 sm:text-lg">{r.blurb}</p>
           </div>
-          <div className="md:text-right">
+          <div className="[transform:translateZ(44px)] md:text-right">
             <div className="text-[clamp(48px,9vw,96px)] leading-none text-white" style={{ fontFamily: 'var(--font-heading)' }}>
               <CountUp value={r.stat.value} suffix={r.stat.suffix} />
             </div>
             <div className="mt-2 text-sm text-white/60">{r.stat.label}</div>
           </div>
-        </div>
+        </Tilt>
       </Reveal>
     </Section>
   )

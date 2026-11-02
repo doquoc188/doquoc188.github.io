@@ -38,9 +38,19 @@ body {
 }
 
 /* Scroll reveal: fade + slide up */
+.tilt-glare {
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.11), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tilt:hover .tilt-glare {
+  opacity: 1;
+}
+
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: perspective(1000px) translateY(40px) rotateX(14deg);
+  transform-origin: 50% 100%;
   transition:
     opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
     transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);

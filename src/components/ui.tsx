@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { prefersReducedMotion, useInView } from '../hooks/useInView'
 
 // Fade + slide-up on scroll. `delay` (ms) staggers siblings.
@@ -16,6 +16,38 @@ export function Reveal({
     <div ref={ref} data-in={inView} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
       {children}
     </div>
+  )
+}
+
+// Card that tilts in 3D toward the pointer, with a moving glare. Children with
+// translateZ float above the card. Mouse only, and off for reduced motion.
+export function Tilt({ children, className = '', max = 8 }: { children: ReactNode; className?: string; max?: number }) {
+  const ref = useRef<HTMLElement>(null)
+
+  const move = (e: React.PointerEvent) => {
+    const el = ref.current
+    if (!el || prefersReducedMotion() || e.pointerType !== 'mouse') return
+    const r = el.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width
+    const y = (e.clientY - r.top) / r.height
+    el.style.transform = `perspective(1100px) rotateX(${(0.5 - y) * max}deg) rotateY(${(x - 0.5) * max}deg)`
+    el.style.setProperty('--mx', `${x * 100}%`)
+    el.style.setProperty('--my', `${y * 100}%`)
+  }
+  const reset = () => {
+    if (ref.current) ref.current.style.transform = ''
+  }
+
+  return (
+    <article
+      ref={ref}
+      onPointerMove={move}
+      onPointerLeave={reset}
+      className={`tilt relative [transform-style:preserve-3d] transition-[transform,border-color] duration-200 ${className}`}
+    >
+      <div aria-hidden className="tilt-glare pointer-events-none absolute inset-0 rounded-[inherit]" />
+      {children}
+    </article>
   )
 }
 
